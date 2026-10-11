@@ -16,7 +16,7 @@
   "type": "commonjs",
   "private": "true",
   "workspaces": [
-    "apps/web",
+    "apps/*",
     "packages/*"
   ],
   "devDependencies": {

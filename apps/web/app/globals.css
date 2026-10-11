@@ -1,8 +1,96 @@
 @import "tailwindcss";
+@source "../../../packages/ui/src";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-text-primary: var(--foreground);
+}
+
+:root {
+  --color-primary: #fff333;
+  --color-primary-50: #fefdf8;
+  --color-secondary: #000066;
+  --color-tertiary: #336f99;
+  --color-tertiary-200: #b4cbdf;
+  --color-tertiary-100: #d2e0ef;
+  --color-tertiary-50: #e9f0f7;
+
+  --color-success: #22c55e;
+  --color-success-200: #def4e9;
+  --color-warning: #f59e0b;
+  --color-warning-200: #f9e9d3;
+  --color-danger: #ef4444;
+  --color-danger-200: #f7e4e6;
+  --color-info: #3b82f6;
+  --color-info-200: #e1ecfb;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-text-muted-300: #6a7282;
+  --color-text-muted-200: #d1d5dc;
+  --color-text-heading: #020617;
+  --color-text-inverse: #f8fafc;
+  --color-text-yellow-btn: #111827;
+
+  --color-border: #cad5e2;
+  --color-background: #f8fafc;
+  --color-card-background: #ffffff;
+  --color-sidebar-background: #ffffff;
+  --color-table-header-background: #f3f4f6;
+
+  --border-card: rgba(226, 232, 240, 0.8);
+  --shadow-card: 0 10px 40px rgba(15, 23, 42, 0.08);
+
+  --color-icon-surface: #d2def0;
+}
+
+.dark {
+  --color-primary: #fde047;
+  --color-primary-50: #2a2716;
+  --color-secondary: #7389c8;
+  --color-tertiary: #7cc4e8;
+  --color-tertiary-200: #243447;
+  --color-tertiary-100: #243447;
+  --color-tertiary-50: #1e293b;
+  --color-success: #4ade80;
+  --color-success-200: #243d32;
+  --color-warning: #fbbf24;
+  --color-warning-200: #4d3f2e;
+
+  --color-danger-200: #452830;
+  --color-danger: #fb7185;
+  --color-info: #60a5fa;
+  --color-info-200: #2d4663;
+
+  --color-white: #ffffff;
+  --color-black: #020617;
+
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-muted-300: #6a7282;
+  --color-text-muted-200: #475569;
+
+  --color-text-heading: #ffffff;
+  --color-text-inverse: #0f172a;
+  --color-text-yellow-btn: #111827;
+
+  --color-border: #334155;
+  --color-background: #111827;
+  --color-card-background: #1f2937;
+  --color-sidebar-background: #18212f;
+
+  --color-table-header-background: #262f3c;
+
+  --border-card: rgba(71, 85, 105, 0.6);
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.45);
+
+  --color-icon-surface: #243447;
 }
 
 @theme inline {
