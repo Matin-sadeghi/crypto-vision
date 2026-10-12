@@ -22,6 +22,10 @@
     "paths": {
       "~/*": ["./app/*"],
       "@/*": ["../*"],
+      "@crypto/common": ["../../packages/common/src"],
+      "@crypto/common/*": ["../../packages/common/src/*"],
+      "@crypto/frontend-core": ["../../packages/frontend-core/src"],
+      "@crypto/frontend-core/*": ["../../packages/frontend-core/src/*"],
       "@crypto/ui": ["../../packages/ui/src"],
       "@crypto/ui/*": ["../../packages/ui/src/*"],
     },
