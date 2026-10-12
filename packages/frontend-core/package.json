@@ -1,0 +1,21 @@
+{
+  "name": "@crypto/frontend-core",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19"
+  },
+  "dependencies": {
+    "@crypto/common": "*",
+    "@tanstack/react-query": "^5.101.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5.8.3"
+  }
+}

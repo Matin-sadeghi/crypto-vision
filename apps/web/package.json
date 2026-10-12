@@ -9,9 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@crypto/common": "*",
+    "@crypto/frontend-core": "*",
+    "@crypto/ui": "*",
+    "@tanstack/react-query": "^5.101.0",
     "next": "16.4.0",
     "react": "19.3.0",
-    "@crypto/ui": "*",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
