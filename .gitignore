@@ -84,3 +84,8 @@ Thumbs.db
 tmp/
 temp/
 .cache/
+
+# =========================
+# local files
+# =========================
+docs/research/notes-private.md
