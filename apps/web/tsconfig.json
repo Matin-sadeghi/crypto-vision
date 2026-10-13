@@ -20,7 +20,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"],
+      "~/*": ["./src/app/*"],
       "@/*": ["../*"],
       "@crypto/common": ["../../packages/common/src"],
       "@crypto/common/*": ["../../packages/common/src/*"],
