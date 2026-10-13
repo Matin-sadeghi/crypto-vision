@@ -16,20 +16,20 @@ and **not** a trading system.
 
 ## 2. Scope (version 1)
 
-| Item               | Decision                                       |
-| ------------------ | ---------------------------------------------- |
-| Asset              | Bitcoin (BTC), quoted in USD                   |
-| Data granularity   | Daily candles (open, high, low, close, volume) |
-| Input window       | Last 30 days                                   |
-| Prediction horizon | 1 day ahead                                    |
-| Task type          | Binary classification (up / down)              |
+| Item               | Decision                                                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Assets             | Multiple cryptocurrencies (the pipeline takes a `symbol` as a parameter). The first version is developed and tested on Bitcoin (BTC), then extended to other coins. |
+| Data granularity   | Daily candles (open, high, low, close, volume)                                                                                                                      |
+| Input window       | Last 30 days                                                                                                                                                        |
+| Prediction horizon | 1 day ahead                                                                                                                                                         |
+| Task type          | Binary classification (up / down)                                                                                                                                   |
 
 Both the input window and the horizon are treated as **configurable
 parameters** so we can experiment with other values (e.g. 7-day window,
 7-day horizon) without rewriting the pipeline.
 
-Out of scope for version 1: other coins, intraday data, sentiment data,
-on-chain data, and any automated trading.
+Out of scope for version 1: intraday data, sentiment data, on-chain data,
+and any automated trading.
 
 ## 3. Target definition
 
@@ -80,6 +80,8 @@ are an acceptable and honest outcome.
 - Should small moves (e.g. below +/-0.5%) be excluded from the labels?
 - Is a 1-day horizon too noisy compared to a 7-day horizon?
 - How should we tune models without overfitting the validation period?
+- Which coins should be included (e.g. top coins by market cap, excluding
+  stablecoins)? One model per coin or one shared model?
 
 ## 7. Planned documents
 
