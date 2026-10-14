@@ -1,9 +1,45 @@
+'use client';
+import {
+  DsBox,
+  DsCustomButton,
+  DsCustomCard,
+  DsField,
+  DsForm,
+  DsFormInput,
+  DsLabel,
+  DsLogoCard,
+  DsTypography,
+} from '@crypto/ui';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { ASSETS } from '~/constants';
 export default function Login() {
-
+  const form = useForm({});
 
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-4 bg-zinc-50 px-6 font-sans dark:bg-black">
-        <div>login</div>
-    </main>
+    <DsCustomCard shadow className="w-full max-w-sm p-6">
+      <DsForm form={form} className="grid grid-cols-1 gap-8">
+        <DsBox className="w-20 h-20 rounded-lg">
+          <DsLogoCard onlyLogo logoSrc={ASSETS.IMAGES.LOGO} />
+        </DsBox>
+        <DsTypography>Sign in to your account</DsTypography>
+        <DsField>
+          <DsLabel>Email</DsLabel>
+          <DsFormInput type="email" name="email" />
+        </DsField>
+        <DsField>
+          <DsLabel>Password</DsLabel>
+          <DsFormInput type="password" name="password" />
+        </DsField>
+        <DsBox className="flex items-center justify-between">
+          <DsTypography variant="helperText">
+            <Link href="/forgot-password">Forgot password?</Link>
+          </DsTypography>
+        </DsBox>
+        <DsCustomButton type="submit" className="w-full">
+          Login
+        </DsCustomButton>
+      </DsForm>
+    </DsCustomCard>
   );
 }
