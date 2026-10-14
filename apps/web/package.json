@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
     "@crypto/common": "*",
     "@crypto/frontend-core": "*",
     "@crypto/ui": "*",

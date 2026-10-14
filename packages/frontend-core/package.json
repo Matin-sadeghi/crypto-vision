@@ -11,8 +11,12 @@
     "react": "^18 || ^19"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
     "@crypto/common": "*",
-    "@tanstack/react-query": "^5.101.0"
+    "@tanstack/react-query": "^5.101.0",
+    "react-hook-form": "^7.76.1",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
     "@types/react": "^19",
