@@ -16,7 +16,11 @@
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "react-hook-form": "^7.76.1"
+    "react-hook-form": "^7.76.1",
+    "lucide-react": "^1.16.0",
+    "sonner": "^2.0.7",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

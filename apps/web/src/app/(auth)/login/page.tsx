@@ -10,6 +10,7 @@ import {
   DsLogoCard,
   DsTypography,
 } from '@crypto/ui';
+import { LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { ASSETS } from '~/constants';
@@ -36,7 +37,7 @@ export default function Login() {
             <Link href="/forgot-password">Forgot password?</Link>
           </DsTypography>
         </DsBox>
-        <DsCustomButton type="submit" className="w-full">
+        <DsCustomButton endIcon={<LogIn size={18} />} type="submit" className="w-full">
           Login
         </DsCustomButton>
       </DsForm>
