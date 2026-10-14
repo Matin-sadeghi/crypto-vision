@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import {DsBox} from "@crypto/ui"
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { AppProviders } from "~/providers/app-providers";

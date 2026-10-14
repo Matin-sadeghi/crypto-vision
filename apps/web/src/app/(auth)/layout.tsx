@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-
+import {DsBox} from '@crypto/ui'
 export const metadata: Metadata = {
   title: "Signup/Signin",
 };
@@ -11,8 +11,14 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-10">
-      {children}
-    </main>
+   <DsBox  bg="background" className="flex min-h-dvh flex-col">
+      <DsBox className="flex grow items-center justify-center p-6 lg:rounded-lg ">
+        {children}
+      </DsBox>
+    </DsBox>
   );
 }
+
+
+
+
