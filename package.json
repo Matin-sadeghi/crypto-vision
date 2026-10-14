@@ -6,10 +6,10 @@
   "directories": {
     "doc": "docs"
   },
-"scripts": {
-  "dev": "concurrently -k \"npm run dev --workspace=apps/web\" \"npm run dev:api\"",
-  "dev:api": "cd apps/api && .venv/bin/python manage.py runserver 8000"
-},
+  "scripts": {
+    "dev": "concurrently -k \"npm run dev --workspace=apps/web\" \"npm run dev:api\"",
+    "dev:api": "cd apps/api && .venv/bin/python manage.py runserver 8000"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "concurrently": "^10.0.6"
+    "concurrently": "^10.0.6",
+    "prettier": "^3.9.10"
   }
 }
