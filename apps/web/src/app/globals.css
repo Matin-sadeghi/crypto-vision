@@ -1,8 +1,6 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @custom-variant dark (&:where(.dark, .dark *));
 @source "../../../../packages/ui/src";
-
-
 
 :root {
   --color-primary: #fff333;
@@ -89,7 +87,6 @@
 
   --color-icon-surface: #243447;
 }
-
 
 body {
   font-family: Arial, Helvetica, sans-serif;

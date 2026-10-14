@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { DsButton, DsTypography,DsBox } from "@crypto/ui";
+import { DsButton, DsTypography, DsBox } from '@crypto/ui';
 
-import { useHealth } from "~/features/health/hooks";
+import { useHealth } from '~/features/health/hooks';
 
 export default function Home() {
   const { health, isLoading, isError, refetch } = useHealth();
@@ -13,11 +13,9 @@ export default function Home() {
         Crypto Vision
       </DsTypography>
       <DsTypography color="black" variant="body">
-        {isLoading && "در حال دریافت وضعیت API…"}
-        {!isLoading && isError && "خطا در ارتباط با API"}
-        {!isLoading && !isError && health
-          ? `API: ${health.service} — ${health.status}`
-          : null}
+        {isLoading && 'در حال دریافت وضعیت API…'}
+        {!isLoading && isError && 'خطا در ارتباط با API'}
+        {!isLoading && !isError && health ? `API: ${health.service} — ${health.status}` : null}
       </DsTypography>
       <DsButton color="blue" onClick={() => void refetch()}>
         تازه‌سازی
