@@ -3,6 +3,7 @@ import { forwardRef, type ReactNode } from 'react';
 import type React from 'react';
 
 import { colors, type ColorType } from '../constant/color';
+import { DsLink } from '../Link';
 
 export type DsCustomButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'custom';
 export type DsCustomButtonPadding = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'custom';
@@ -16,6 +17,7 @@ type DsCustomButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   padding?: DsCustomButtonPadding;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
+  href?:string;
 };
 
 const sizeClasses: Record<Exclude<DsCustomButtonSize, 'custom'>, string> = {
@@ -138,7 +140,32 @@ export const DsCustomButton = forwardRef<HTMLButtonElement, DsCustomButtonProps>
     const resolvedPadding = padding ?? (size === 'custom' ? 'custom' : defaultPaddingBySize[size]);
     const hasIcon = Boolean(startIcon || endIcon);
 
-    return (
+    return "href" in props ? 
+    <DsLink href={props["href"]}>
+        <button
+        ref={ref}
+        {...props}
+        className={clsx(
+          'inline-flex items-center justify-center rounded-lg font-medium transition-all',
+          variant === 'ghost' ? 'border border-transparent' : 'border',
+          'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
+          hasIcon && 'gap-2',
+          size !== 'custom' && sizeClasses[size],
+          resolvedPadding !== 'custom' && paddingClasses[resolvedPadding],
+          className,
+        )}
+        style={{
+          ...resolveButtonStyle({ color, borderColor, textColor, variant }),
+          ...style,
+        }}
+      >
+        {startIcon ? <ButtonIcon>{startIcon}</ButtonIcon> : null}
+        {children}
+        {endIcon ? <ButtonIcon>{endIcon}</ButtonIcon> : null}
+      </button>
+      </DsLink>
+    :(
+
       <button
         ref={ref}
         {...props}
