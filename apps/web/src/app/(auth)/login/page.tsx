@@ -10,16 +10,20 @@ import {
   DsLogoCard,
   DsTypography,
 } from '@crypto/ui';
+import { authLoginSchema, AuthLoginFormData } from '~/features/auth/types';
 import { LogIn } from 'lucide-react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { ASSETS } from '~/constants';
-export default function Login() {
-  const form = useForm({});
 
+import { ASSETS } from '~/constants';
+import { useAppForm } from '@crypto/frontend-core';
+export default function Login() {
+  const form = useAppForm(authLoginSchema);
+  const submit = (data: AuthLoginFormData) => {
+    console.log(data);
+  };
   return (
     <DsCustomCard shadow className="w-full max-w-sm p-6">
-      <DsForm form={form} className="grid grid-cols-1 gap-8">
+      <DsForm onSubmit={submit} form={form} className="grid grid-cols-1 gap-8">
         <DsBox className="w-20 h-20 rounded-lg">
           <DsLogoCard onlyLogo logoSrc={ASSETS.IMAGES.LOGO} />
         </DsBox>

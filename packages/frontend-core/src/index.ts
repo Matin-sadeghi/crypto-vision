@@ -4,3 +4,4 @@ export { createQueryClient } from './api/create-query-client';
 export type { ApiErrorHandler, CreateQueryClientOptions } from './api/create-query-client';
 export { getRegisteredQueryClient, registerQueryClient } from './api/query-client-registry';
 export { tokenStore } from './api/token-store';
+export * from './hooks';
