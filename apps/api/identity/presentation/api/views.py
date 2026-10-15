@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db import IntegrityError, transaction
@@ -17,7 +17,7 @@ from identity.application.use_cases.login import (
 )
 from identity.infrastructure.jwt_service import SimpleJWTTokenIssuer
 from identity.infrastructure.repositories import DjangoUserRepository
-from .serializers import RegisterSerializer,LoginSerializer,LoginResponseSerializer
+from .serializers import RegisterSerializer,LoginSerializer,LoginResponseSerializer,UserSerializer
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -88,3 +88,17 @@ class LoginView(APIView):
             },
             status=status.HTTP_200_OK,
         ) 
+        
+ 
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        responses=UserSerializer,
+        summary="Get current user",
+    )
+    
+    def get(self,request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    
