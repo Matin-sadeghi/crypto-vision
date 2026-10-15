@@ -44,8 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     "corsheaders",
+      # Third-party apps
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "drf_spectacular",
+    # Project apps
+    "identity",
 ]
 
 MIDDLEWARE = [
@@ -134,4 +139,17 @@ MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
+}
+
+AUTH_USER_MODEL = "identity.User"
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Crypto vision Auth API",
+    "DESCRIPTION": "API documentation for our Django project",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
