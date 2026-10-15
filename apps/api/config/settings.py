@@ -48,6 +48,7 @@ INSTALLED_APPS = [
       # Third-party apps
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     # Project apps
     "identity",
 ]
@@ -141,3 +142,14 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = "identity.User"
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Crypto vision Auth API",
+    "DESCRIPTION": "API documentation for our Django project",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
