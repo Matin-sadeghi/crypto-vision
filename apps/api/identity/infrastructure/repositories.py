@@ -30,3 +30,14 @@ class DjangoUserRepository:
             last_name=user.last_name,
             first_name=user.first_name
         ) 
+    
+    def authenticate(self,email:str,password:str)->UserIdentity | None:
+        user = User.objects.filter(email__iexact=email).first()
+        
+        if user is None:
+            return None
+        
+        if not user.check_password(password):
+            return None
+        
+        return UserIdentity(id=user.pk,email=user.email,is_active=user.is_active,first_name=user.first_name,last_name=user.last_name)

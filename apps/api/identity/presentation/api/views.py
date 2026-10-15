@@ -10,8 +10,14 @@ from identity.application.use_cases.register import (
     RegisterUserUseCase,
     EmailAlreadyRegisteredError
 )
+from identity.application.use_cases.login import (
+    LoginUserInput,
+    LoginUserUseCase,
+    InvalidCredentialsError
+)
+from identity.infrastructure.jwt_service import SimpleJWTTokenIssuer
 from identity.infrastructure.repositories import DjangoUserRepository
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer,LoginSerializer,LoginResponseSerializer
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -32,10 +38,7 @@ class RegisterView(APIView):
                                                             password=serializer.validated_data["password"],
                                                             first_name=serializer.validated_data["first_name"],
                                                             last_name=serializer.validated_data["last_name"],
-                                                            
-                                                          
-                                                    
-                                                          ))
+                                                        ))
         except EmailAlreadyRegisteredError:
             return Response({"email":["This email is already registerd."]},status=status.HTTP_400_BAD_REQUEST)
     
@@ -43,7 +46,45 @@ class RegisterView(APIView):
                 "id": user.id,
                 "email": user.email,
                 "first_name":user.first_name,
-                "lasr_name":user.last_name
+                "last_name":user.last_name
             },
             status=status.HTTP_201_CREATED,
         )
+        
+        
+        
+        
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    @extend_schema(
+        request=LoginSerializer,
+        responses={200: LoginResponseSerializer,401:{"description":"Invalid email or password"}},
+        summary="Login with email and password a new user",
+    )
+    def post(self,request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        use_case = LoginUserUseCase(user_repo=DjangoUserRepository(),token_issuer=SimpleJWTTokenIssuer())
+
+        try:
+            result = use_case.execute(LoginUserInput(
+                    email=serializer.validated_data["email"],
+                    password=serializer.validated_data["password"],
+            ))
+        except InvalidCredentialsError:
+            return Response({"detail":"Invalid email or password"},status=status.HTTP_401_UNAUTHORIZED)
+    
+        return Response({
+            "user":{
+                 "id": result.user.id,
+                               "email": result.user.email,
+                               "first_name":result.user.first_name,
+                               "last_name":result.user.last_name, 
+            },
+              
+                "access":result.access,
+                "refresh":result.refresh
+            },
+            status=status.HTTP_200_OK,
+        ) 
