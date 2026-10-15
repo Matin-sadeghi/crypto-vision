@@ -28,13 +28,22 @@ class RegisterView(APIView):
 
         try:
             with transaction.atomic():
-                user = use_case.execute(RegisterUserInput(email=serializer.validated_data["email"],password=serializer.validated_data["password"]))
+                user = use_case.execute(RegisterUserInput(  email=serializer.validated_data["email"],
+                                                            password=serializer.validated_data["password"],
+                                                            first_name=serializer.validated_data["first_name"],
+                                                            last_name=serializer.validated_data["last_name"],
+                                                            
+                                                          
+                                                    
+                                                          ))
         except EmailAlreadyRegisteredError:
             return Response({"email":["This email is already registerd."]},status=status.HTTP_400_BAD_REQUEST)
     
         return Response({
                 "id": user.id,
                 "email": user.email,
+                "first_name":user.first_name,
+                "lasr_name":user.last_name
             },
             status=status.HTTP_201_CREATED,
         )

@@ -10,6 +10,9 @@ class EmailAlreadyRegisteredError(Exception):
 class RegisterUserInput:
     email:str
     password:str
+    first_name:str
+    last_name:str
+    
 
 
 class RegisterUserUseCase:
@@ -27,4 +30,4 @@ class RegisterUserUseCase:
         if len(data.password) < 8 :
             raise ValueError("password must be at least 8 characters")
 
-        return self.user_repo.create_user(email=email,password=data.password)
+        return self.user_repo.create_user(email=email,password=data.password,first_name=data.first_name,last_name=data.last_name)

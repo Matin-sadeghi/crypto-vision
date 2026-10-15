@@ -13,16 +13,20 @@ class DjangoUserRepository:
         if user is None:
             return None
 
-        return UserIdentity(id = user.pk,email=user.email,is_active = user.is_active)
+        return UserIdentity(id = user.pk,email=user.email,is_active = user.is_active,first_name=user.first_name,last_name=user.last_name)
 
-    def create_user(self, email: str, password: str) -> UserIdentity:
+    def create_user(self, email: str, password: str,first_name:str,last_name:str) -> UserIdentity:
         user = User.objects.create_user(
             email=email,
             password=password,
+            first_name=first_name,
+            last_name = last_name
         )
 
         return UserIdentity(
             id=user.pk,
             email=user.email,
             is_active=user.is_active,
+            last_name=user.last_name,
+            first_name=user.first_name
         ) 

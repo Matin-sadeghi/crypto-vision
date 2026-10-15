@@ -5,3 +5,5 @@ class UserIdentity:
     id:int
     email:str
     is_active:bool
+    first_name:str
+    last_name:str
