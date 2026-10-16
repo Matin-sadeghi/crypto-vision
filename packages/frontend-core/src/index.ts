@@ -1,3 +1,4 @@
+export * from './api/api-endpoints';
 export { createApiClient, resolveApiBaseUrl } from './api/create-api-client';
 export type { ApiClient, CreateApiClientOptions } from './api/create-api-client';
 export { createQueryClient } from './api/create-query-client';

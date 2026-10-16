@@ -4,6 +4,7 @@ import { AuthLoginFormData } from '../types';
 import { tokenStore } from '@crypto/frontend-core';
 import { toast } from 'sonner';
 import { redirect } from 'next/navigation';
+import { API_ENDPOINTS } from '@crypto/frontend-core';
 
 type LoginResponse = {
   access: string;
@@ -12,7 +13,8 @@ type LoginResponse = {
 
 export const useLogin = () => {
   const mutation = useMutation({
-    mutationFn: async (data: AuthLoginFormData) => api.post<LoginResponse>('/auth/login/', data),
+    mutationFn: async (data: AuthLoginFormData) =>
+      api.post<LoginResponse>(API_ENDPOINTS.auth.login, data),
     onSuccess: (res) => {
       tokenStore.set(res.access);
       redirect('/me');
