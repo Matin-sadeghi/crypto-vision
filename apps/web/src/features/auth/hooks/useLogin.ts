@@ -17,7 +17,7 @@ export const useLogin = () => {
       api.post<LoginResponse>(API_ENDPOINTS.auth.login, data),
     onSuccess: (res) => {
       tokenStore.set(res.access);
-      redirect('/me');
+      // redirect('/me');
     },
     onError: (_e) => {
       console.log(_e);

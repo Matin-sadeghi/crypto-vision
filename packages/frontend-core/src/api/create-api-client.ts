@@ -1,5 +1,4 @@
 import { ApiError } from '@crypto/common';
-
 import { tokenStore } from './token-store';
 
 export type ApiClient = {
@@ -15,17 +14,25 @@ export type CreateApiClientOptions = {
   getToken?: () => string | null;
 };
 
+type RefreshResponse = {
+  access: string;
+};
+
+const REFRESH_PATH = '/auth/refresh/';
+
 const resolveBaseUrl = (baseUrl: string | (() => string)): string =>
   typeof baseUrl === 'function' ? baseUrl() : baseUrl;
 
 const joinUrl = (baseUrl: string, path: string): string => {
   const base = baseUrl.replace(/\/+$/, '');
   const segment = path.startsWith('/') ? path : `/${path}`;
+
   return `${base}${segment}`;
 };
 
 const parseJsonBody = async (response: Response): Promise<unknown> => {
   const text = await response.text();
+
   if (!text) return undefined;
 
   try {
@@ -46,21 +53,90 @@ const buildHeaders = (
     headers.set('Content-Type', 'application/json');
   }
 
-  if (token && !headers.has('Authorization')) {
+  // توکن جدید باید جایگزین Authorization قبلی شود.
+  if (token) {
     headers.set('Authorization', `Bearer ${token}`);
+  } else {
+    headers.delete('Authorization');
   }
 
   return headers;
+};
+
+const getErrorMessage = (body: unknown, fallback: string): string => {
+  if (
+    typeof body === 'object' &&
+    body !== null &&
+    'detail' in body &&
+    typeof body.detail === 'string'
+  ) {
+    return body.detail;
+  }
+
+  return fallback || 'Request failed';
+};
+
+const shouldRefreshToken = (path: string): boolean => {
+  const pathname = path.split('?')[0].replace(/\/+$/, '');
+
+  const excludedPaths = ['/auth/login', '/auth/refresh', '/auth/logout', '/auth/register'];
+
+  return !excludedPaths.some((excluded) => pathname === excluded || pathname.endsWith(excluded));
 };
 
 export function createApiClient({
   baseUrl,
   getToken = () => tokenStore.get(),
 }: CreateApiClientOptions): ApiClient {
+  // درخواست‌های هم‌زمان 401 از یک Refresh مشترک استفاده می‌کنند.
+  let refreshPromise: Promise<string | null> | null = null;
+
+  const refreshAccessToken = async (): Promise<string | null> => {
+    if (refreshPromise) {
+      return refreshPromise;
+    }
+
+    refreshPromise = (async () => {
+      try {
+        const response = await fetch(joinUrl(resolveBaseUrl(baseUrl), REFRESH_PATH), {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          tokenStore.clear();
+          return null;
+        }
+
+        const data = (await parseJsonBody(response)) as Partial<RefreshResponse> | undefined;
+
+        if (!data || typeof data.access !== 'string') {
+          tokenStore.clear();
+          return null;
+        }
+
+        tokenStore.set(data.access);
+
+        return data.access;
+      } catch {
+        tokenStore.clear();
+        return null;
+      } finally {
+        refreshPromise = null;
+      }
+    })();
+
+    return refreshPromise;
+  };
+
   const request = async <TResponse>(
     path: string,
     init?: RequestInit,
     jsonBody?: unknown,
+    alreadyRetried = false,
   ): Promise<TResponse> => {
     const token = getToken();
     const headers = buildHeaders(init, jsonBody, token);
@@ -72,18 +148,23 @@ export function createApiClient({
       body: jsonBody !== undefined ? JSON.stringify(jsonBody) : init?.body,
     });
 
+    // در صورت انقضای Access Token، یک بار Refresh و Retry انجام بده.
+    if (response.status === 401 && !alreadyRetried && shouldRefreshToken(path)) {
+      const newAccessToken = await refreshAccessToken();
+
+      if (newAccessToken) {
+        return request<TResponse>(path, init, jsonBody, true);
+      }
+    }
+
     const parsedBody = await parseJsonBody(response);
 
     if (!response.ok) {
-      const message =
-        typeof parsedBody === 'object' &&
-        parsedBody !== null &&
-        'detail' in parsedBody &&
-        typeof (parsedBody as { detail: unknown }).detail === 'string'
-          ? (parsedBody as { detail: string }).detail
-          : response.statusText || 'Request failed';
-
-      throw new ApiError(response.status, message, parsedBody);
+      throw new ApiError(
+        response.status,
+        getErrorMessage(parsedBody, response.statusText),
+        parsedBody,
+      );
     }
 
     if (response.status === 204) {
