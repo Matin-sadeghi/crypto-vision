@@ -75,7 +75,7 @@ class LoginView(APIView):
         except InvalidCredentialsError:
             return Response({"detail":"Invalid email or password"},status=status.HTTP_401_UNAUTHORIZED)
     
-        return Response({
+        response =  Response({
             "user":{
                  "id": result.user.id,
                                "email": result.user.email,
@@ -87,7 +87,19 @@ class LoginView(APIView):
                 "refresh":result.refresh
             },
             status=status.HTTP_200_OK,
+        )
+        
+        sevenDays = 7 * 24 * 60 * 60
+        response.set_cookie(
+            key="refreshToken",
+            value=result.refresh,
+            max_age=sevenDays,
+            httponly=True,
+            secure=False,
+            samesite="Lax", 
+            path="/api/v1/auth/",
         ) 
+        return response
         
  
 class MeView(APIView):

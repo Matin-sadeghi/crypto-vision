@@ -16,14 +16,16 @@ import Link from 'next/link';
 
 import { ASSETS } from '~/constants';
 import { useAppForm } from '@crypto/frontend-core';
+import { useLogin } from '~/features/auth/hooks/useLogin';
 export default function Login() {
+  const { loading, submit } = useLogin();
   const form = useAppForm(authLoginSchema);
-  const submit = (data: AuthLoginFormData) => {
-    console.log(data);
+  const onSubmit = (data: AuthLoginFormData) => {
+    submit(data);
   };
   return (
     <DsCustomCard shadow className="w-full max-w-sm p-6">
-      <DsForm onSubmit={submit} form={form} className="grid grid-cols-1 gap-8">
+      <DsForm onSubmit={onSubmit} form={form} className="grid grid-cols-1 gap-8">
         <DsBox className="w-20 h-20 rounded-lg">
           <DsLogoCard onlyLogo logoSrc={ASSETS.IMAGES.LOGO} />
         </DsBox>

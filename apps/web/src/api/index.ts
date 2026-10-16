@@ -9,7 +9,6 @@ export const api = createApiClient({
   baseUrl: resolveApiBaseUrl,
 });
 
-
 export const queryClient = createQueryClient({
   onUnauthorized: () => {
     if (typeof window !== 'undefined') {

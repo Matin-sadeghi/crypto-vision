@@ -68,6 +68,7 @@ export function createApiClient({
     const response = await fetch(joinUrl(resolveBaseUrl(baseUrl), path), {
       ...init,
       headers,
+      credentials: 'include',
       body: jsonBody !== undefined ? JSON.stringify(jsonBody) : init?.body,
     });
 
@@ -106,6 +107,5 @@ export function createApiClient({
  * Server: `API_INTERNAL_BASE_URL` or direct Django URL.
  */
 export function resolveApiBaseUrl(): string {
-
-  return 'http://127.0.0.1:8000/api/v1'
+  return 'http://127.0.0.1:8000/api/v1';
 }
