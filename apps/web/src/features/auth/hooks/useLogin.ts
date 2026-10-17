@@ -20,9 +20,8 @@ export const useLogin = () => {
       toast.success('Login successful');
       // redirect('/me');
     },
-    onError: (_e) => {
-      console.log(_e);
-      toast.error('error');
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 
