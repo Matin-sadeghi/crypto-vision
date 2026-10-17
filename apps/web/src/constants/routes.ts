@@ -3,7 +3,14 @@
  * Keep in sync with `app/routes.ts`.
  */
 export const ROUTES = {
-  HOME: '/',
+  DASHBOARD: {
+    OVERVIEW: '/',
+    MARKETS: '/mrkets',
+    MY_WATCHLIST: '/wtach-list',
+    AI_ANALYSIS: '/ai-analysis',
+    NEWS_EVENTS: '/news-events',
+    PROFOLIO_TRACKER: '/profolio-tracker',
+    PRICE_ALERTS: '/price-alerts',
+  },
   SIGNUP: '/login',
 } as const;
-
