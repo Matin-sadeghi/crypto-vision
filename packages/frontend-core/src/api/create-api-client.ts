@@ -150,6 +150,12 @@ export function createApiClient({
 
     // در صورت انقضای Access Token، یک بار Refresh و Retry انجام بده.
     if (response.status === 401 && !alreadyRetried && shouldRefreshToken(path)) {
+      console.log('xxxxxxxxxx[API DEBUG]', {
+        path,
+        status: response.status,
+        shouldRefresh: shouldRefreshToken(path),
+        alreadyRetried,
+      });
       const newAccessToken = await refreshAccessToken();
 
       if (newAccessToken) {
@@ -160,6 +166,10 @@ export function createApiClient({
     const parsedBody = await parseJsonBody(response);
 
     if (!response.ok) {
+      console.log('oooooooooo[API DEBUG] throwing ApiError', {
+        path,
+        status: response.status,
+      });
       throw new ApiError(
         response.status,
         getErrorMessage(parsedBody, response.statusText),

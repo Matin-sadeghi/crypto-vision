@@ -22,12 +22,12 @@ export const useLogin = () => {
     },
     onError: (_e) => {
       console.log(_e);
-      //   toast.error('error');
+      toast.error('error');
     },
   });
 
   return {
-    submit: (data: AuthLoginFormData) => mutation.mutateAsync(data),
+    submit: (data: AuthLoginFormData) => mutation.mutate(data),
     loading: mutation.isPending,
   };
 };

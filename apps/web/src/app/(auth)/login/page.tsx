@@ -44,7 +44,7 @@ export default function Login() {
           </DsTypography>
         </DsBox>
         <DsCustomButton endIcon={<LogIn size={18} />} type="submit" className="w-full">
-          Login
+          {loading ? 'Loading...' : 'Login'}
         </DsCustomButton>
       </DsForm>
     </DsCustomCard>

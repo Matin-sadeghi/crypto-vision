@@ -105,7 +105,7 @@ class LoginView(APIView):
                     password=serializer.validated_data["password"],
             ))
         except InvalidCredentialsError:
-            return Response({"detail":"Invalid email or password"},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail":"Invalid email or password"},status=status.HTTP_404_NOT_FOUND)
     
         response =  Response({
             "user":{

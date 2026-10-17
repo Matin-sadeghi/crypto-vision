@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import clsx from 'clsx';
 import { FormProvider } from 'react-hook-form';
 
@@ -12,7 +12,13 @@ type Props = {
 export const DsForm = ({ className, form, onSubmit = () => {}, children }: Props) => {
   return (
     <FormProvider {...form}>
-      <form className={clsx(className)} onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className={clsx(className)}
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit(onSubmit)(event);
+        }}
+      >
         {children}
       </form>
     </FormProvider>
