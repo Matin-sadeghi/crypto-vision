@@ -10,13 +10,11 @@ import {
   DsLogoCard,
   DsTypography,
 } from '@crypto/ui';
-import { authLoginSchema, AuthLoginFormData } from '~/features/auth/types';
 import { LogIn } from 'lucide-react';
 import Link from 'next/link';
-
-import { ASSETS } from '~/constants';
+import { AuthLoginFormData, authLoginSchema, useLogin } from '~/features/auth';
 import { useAppForm } from '@crypto/frontend-core';
-import { useLogin } from '~/features/auth/hooks/useLogin';
+import { ASSETS } from '~/constants';
 export default function Login() {
   const { loading, submit } = useLogin();
   const form = useAppForm(authLoginSchema);
