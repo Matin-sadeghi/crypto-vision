@@ -6,5 +6,6 @@ export * from './Field';
 export * from './Form';
 export * from './Input';
 export * from './Link';
+export * from './Loader';
 export * from './LogoCard';
 export * from './Typography';
