@@ -109,7 +109,7 @@ class LoginView(APIView):
         responses={
             200: LoginApiResponseSerializer,
             400: ApiErrorResponseSerializer,
-            401: ApiErrorResponseSerializer,
+            404: ApiErrorResponseSerializer,
         },
         summary="Login with email and password a new user",
     )
@@ -126,7 +126,7 @@ class LoginView(APIView):
         except InvalidCredentialsError:
             return error_response(
                 "Invalid email or password.",
-                status_code=status.HTTP_401_UNAUTHORIZED,
+                status_code=status.HTTP_404_NOT_FOUND,
             )
     
         response = success_response({

@@ -8,7 +8,6 @@ import {
   DsForm,
   DsFormInput,
   DsLabel,
-  DsLoadingSpinner,
   DsLogoCard,
   DsTypography,
 } from '@crypto/ui';
@@ -22,8 +21,6 @@ export const Login = () => {
   const onSubmit = (data: AuthLoginFormData) => {
     submit(data);
   };
-
-  if (loading) return <DsLoadingSpinner />;
 
   return (
     <DsCustomCard shadow className="w-full max-w-sm p-6">
