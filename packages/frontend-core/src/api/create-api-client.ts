@@ -1,12 +1,30 @@
-import { ApiError } from '@crypto/common';
+import { ApiError, type ApiSuccessResponse } from '@crypto/common';
 import { tokenStore } from './token-store';
 
 export type ApiClient = {
-  get: <TResponse>(path: string, init?: RequestInit) => Promise<TResponse>;
-  post: <TResponse>(path: string, body?: unknown, init?: RequestInit) => Promise<TResponse>;
-  put: <TResponse>(path: string, body?: unknown, init?: RequestInit) => Promise<TResponse>;
-  patch: <TResponse>(path: string, body?: unknown, init?: RequestInit) => Promise<TResponse>;
-  delete: <TResponse>(path: string, init?: RequestInit) => Promise<TResponse>;
+  get: <TResponse>(
+    path: string,
+    init?: RequestInit,
+  ) => Promise<ApiSuccessResponse<TResponse>>;
+  post: <TResponse>(
+    path: string,
+    body?: unknown,
+    init?: RequestInit,
+  ) => Promise<ApiSuccessResponse<TResponse>>;
+  put: <TResponse>(
+    path: string,
+    body?: unknown,
+    init?: RequestInit,
+  ) => Promise<ApiSuccessResponse<TResponse>>;
+  patch: <TResponse>(
+    path: string,
+    body?: unknown,
+    init?: RequestInit,
+  ) => Promise<ApiSuccessResponse<TResponse>>;
+  delete: <TResponse>(
+    path: string,
+    init?: RequestInit,
+  ) => Promise<ApiSuccessResponse<TResponse>>;
 };
 
 export type CreateApiClientOptions = {
@@ -67,6 +85,15 @@ const getErrorMessage = (body: unknown, fallback: string): string => {
   if (
     typeof body === 'object' &&
     body !== null &&
+    'message' in body &&
+    typeof body.message === 'string'
+  ) {
+    return body.message;
+  }
+
+  if (
+    typeof body === 'object' &&
+    body !== null &&
     'detail' in body &&
     typeof body.detail === 'string'
   ) {
@@ -111,7 +138,10 @@ export function createApiClient({
           return null;
         }
 
-        const data = (await parseJsonBody(response)) as Partial<RefreshResponse> | undefined;
+        const envelope = (await parseJsonBody(
+          response,
+        )) as ApiSuccessResponse<Partial<RefreshResponse>> | undefined;
+        const data = envelope?.data;
 
         if (!data || typeof data.access !== 'string') {
           tokenStore.clear();
@@ -137,7 +167,7 @@ export function createApiClient({
     init?: RequestInit,
     jsonBody?: unknown,
     alreadyRetried = false,
-  ): Promise<TResponse> => {
+  ): Promise<ApiSuccessResponse<TResponse>> => {
     const token = getToken();
     const headers = buildHeaders(init, jsonBody, token);
 
@@ -168,10 +198,13 @@ export function createApiClient({
     }
 
     if (response.status === 204) {
-      return undefined as TResponse;
+      return {
+        status: response.status,
+        message: response.statusText || 'Success',
+      };
     }
 
-    return parsedBody as TResponse;
+    return parsedBody as ApiSuccessResponse<TResponse>;
   };
 
   return {

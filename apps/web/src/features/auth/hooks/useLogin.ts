@@ -3,7 +3,6 @@ import { api } from '~/api';
 import { AuthLoginFormData } from '../types';
 import { tokenStore } from '@crypto/frontend-core';
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
 import { API_ENDPOINTS } from '@crypto/frontend-core';
 
 type LoginResponse = {
@@ -16,8 +15,13 @@ export const useLogin = () => {
     mutationFn: async (data: AuthLoginFormData) =>
       api.post<LoginResponse>(API_ENDPOINTS.auth.login, data),
     onSuccess: (res) => {
-      tokenStore.set(res.access);
-      toast.success('Login successful');
+      if (!res.data) {
+        toast.error('The login response did not include authentication data.');
+        return;
+      }
+
+      tokenStore.set(res.data.access);
+      toast.success(res.message);
       // redirect('/me');
     },
     onError: (e) => {

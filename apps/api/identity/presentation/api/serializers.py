@@ -29,3 +29,18 @@ class LoginResponseSerializer(serializers.Serializer):
     user = UserSerializer()
     access = serializers.CharField()
     refresh = serializers.CharField()
+
+class ApiResponseSerializer(serializers.Serializer):
+    status = serializers.IntegerField()
+    message = serializers.CharField()
+    data = serializers.JSONField(required=False)
+
+class RegisterApiResponseSerializer(ApiResponseSerializer):
+    data = UserSerializer()
+
+class LoginApiResponseSerializer(ApiResponseSerializer):
+    data = LoginResponseSerializer()
+
+class ApiErrorResponseSerializer(serializers.Serializer):
+    status = serializers.IntegerField()
+    message = serializers.CharField()

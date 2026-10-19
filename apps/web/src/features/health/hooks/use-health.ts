@@ -15,7 +15,7 @@ export const useHealth = (enabled = true) => {
   });
 
   return {
-    health: query.data,
+    health: query.data?.data,
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,

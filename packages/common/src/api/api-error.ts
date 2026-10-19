@@ -10,6 +10,17 @@ export class ApiError extends Error {
   }
 }
 
+export type ApiSuccessResponse<TData = undefined> = {
+  status: number;
+  message: string;
+  data?: TData;
+};
+
+export type ApiErrorResponse = {
+  status: number;
+  message: string;
+};
+
 export function isApiUnauthorizedError(error: unknown): boolean {
   return error instanceof ApiError && error.status === 401;
 }

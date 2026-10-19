@@ -1,6 +1,5 @@
 from rest_framework import status
 from rest_framework.permissions import AllowAny,IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db import IntegrityError, transaction
 from drf_spectacular.utils import extend_schema
@@ -22,7 +21,16 @@ from identity.application.use_cases.login import (
 )
 from identity.infrastructure.jwt_service import SimpleJWTTokenIssuer
 from identity.infrastructure.repositories import DjangoUserRepository
-from .serializers import RegisterSerializer,LoginSerializer,LoginResponseSerializer,UserSerializer
+from config.api_responses import error_response, success_response
+from .serializers import (
+    LoginApiResponseSerializer,
+    LoginSerializer,
+    ApiErrorResponseSerializer,
+    ApiResponseSerializer,
+    RegisterApiResponseSerializer,
+    RegisterSerializer,
+    UserSerializer,
+)
 
 
 REFRESH_COOKIE_NAME = "refreshToken"
@@ -55,7 +63,10 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
     @extend_schema(
         request=RegisterSerializer,
-        responses={201: RegisterSerializer},
+        responses={
+            201: RegisterApiResponseSerializer,
+            400: ApiErrorResponseSerializer,
+        },
         summary="Register a new user",
         description="Create a user with email and password.",
     )
@@ -72,15 +83,19 @@ class RegisterView(APIView):
                                                             last_name=serializer.validated_data["last_name"],
                                                         ))
         except EmailAlreadyRegisteredError:
-            return Response({"email":["This email is already registerd."]},status=status.HTTP_400_BAD_REQUEST)
+            return error_response(
+                "This email is already registered.",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
     
-        return Response({
+        return success_response({
                 "id": user.id,
                 "email": user.email,
                 "first_name":user.first_name,
                 "last_name":user.last_name
             },
-            status=status.HTTP_201_CREATED,
+            message="Registration successful.",
+            status_code=status.HTTP_201_CREATED,
         )
         
         
@@ -91,7 +106,11 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
     @extend_schema(
         request=LoginSerializer,
-        responses={200: LoginResponseSerializer,401:{"description":"Invalid email or password"}},
+        responses={
+            200: LoginApiResponseSerializer,
+            400: ApiErrorResponseSerializer,
+            401: ApiErrorResponseSerializer,
+        },
         summary="Login with email and password a new user",
     )
     def post(self,request):
@@ -105,9 +124,12 @@ class LoginView(APIView):
                     password=serializer.validated_data["password"],
             ))
         except InvalidCredentialsError:
-            return Response({"detail":"Invalid email or password"},status=status.HTTP_404_NOT_FOUND)
+            return error_response(
+                "Invalid email or password.",
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
     
-        response =  Response({
+        response = success_response({
             "user":{
                  "id": result.user.id,
                                "email": result.user.email,
@@ -118,7 +140,7 @@ class LoginView(APIView):
                 "access":result.access,
                 "refresh":result.refresh
             },
-            status=status.HTTP_200_OK,
+            message="Login successful.",
         )
         
         sevenDays = 7 * 24 * 60 * 60
@@ -137,11 +159,23 @@ class LoginView(APIView):
 class RefrshCookieView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
+
+    @extend_schema(
+        request=None,
+        responses={
+            200: ApiResponseSerializer,
+            401: ApiErrorResponseSerializer,
+        },
+        summary="Refresh the access token",
+    )
     def post(self,request):
         raw_refresh = request.COOKIES.get(REFRESH_COOKIE_NAME)
         
         if not raw_refresh:
-            response =  Response({"detail":"Retresh token is missing."},status=status.HTTP_401_UNAUTHORIZED)
+            response = error_response(
+                "Refresh token is missing.",
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
             delete_refresh_cookie(response)
             return response
     
@@ -151,20 +185,29 @@ class RefrshCookieView(APIView):
         try:
             tokens = use_case.execute(raw_refresh)
         except InvalidRefreshTokenError:
-            response = Response(
-                {"detail": "Refresh token is invalid or expired."},
-                status=status.HTTP_401_UNAUTHORIZED,
+            response = error_response(
+                "Refresh token is invalid or expired.",
+                status_code=status.HTTP_401_UNAUTHORIZED,
             )
             delete_refresh_cookie(response)
             return response
         
-        response = Response({"access":tokens["access"]})
+        response = success_response(
+            {"access": tokens["access"]},
+            message="Token refreshed.",
+        )
         set_refresh_cookie(response,tokens["refresh"])
         return response
  
 class LogoutView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
+
+    @extend_schema(
+        request=None,
+        responses={200: ApiResponseSerializer},
+        summary="Log out",
+    )
     def post(self,request):
         raw_refresh = request.COOKIES.get(REFRESH_COOKIE_NAME)
         token_service= SimpleJWTTokenIssuer()
@@ -175,7 +218,7 @@ class LogoutView(APIView):
         except InvalidRefreshTokenError:
             pass
         
-        response = Response(status=status.HTTP_204_NO_CONTENT)
+        response = success_response(message="Logout successful.")
         delete_refresh_cookie(response)
         return response    
     
@@ -185,12 +228,15 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-        responses=UserSerializer,
+        responses={
+            200: ApiResponseSerializer,
+            401: ApiErrorResponseSerializer,
+        },
         summary="Get current user",
     )
     
     def get(self,request):
         serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        return success_response(serializer.data, message="User retrieved.")
     
     
