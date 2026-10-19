@@ -1,19 +1,12 @@
-import { useMutation } from '@tanstack/react-query';
-import { api } from '~/api';
-import { AuthLoginFormData } from '../types';
 import { tokenStore } from '@crypto/frontend-core';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { API_ENDPOINTS } from '@crypto/frontend-core';
-
-type LoginResponse = {
-  access: string;
-  refresh: string;
-};
+import { loginApi } from '../api';
+import { AuthLoginFormData } from '../types';
 
 export const useLogin = () => {
   const mutation = useMutation({
-    mutationFn: async (data: AuthLoginFormData) =>
-      api.post<LoginResponse>(API_ENDPOINTS.auth.login, data),
+    mutationFn: loginApi,
     onSuccess: (res) => {
       if (!res.data) {
         toast.error('The login response did not include authentication data.');
