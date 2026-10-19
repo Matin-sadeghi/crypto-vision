@@ -27,7 +27,6 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <AppProviders>{children}</AppProviders>
-        <Toaster richColors position="top-center" closeButton duration={4000} />
       </body>
     </html>
   );
