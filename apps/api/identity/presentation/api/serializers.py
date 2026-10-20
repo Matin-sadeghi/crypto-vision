@@ -28,7 +28,6 @@ class LoginSerializer(serializers.Serializer):
 class LoginResponseSerializer(serializers.Serializer):
     user = UserSerializer()
     access = serializers.CharField()
-    refresh = serializers.CharField()
 
 class ApiResponseSerializer(serializers.Serializer):
     status = serializers.IntegerField()

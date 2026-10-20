@@ -1,29 +1,22 @@
 'use client';
-//import { capitalize } from '@ndecision/common';
 import { DsAppLayoutUserMenu } from '@crypto/ui';
-import { useMutation } from '@tanstack/react-query';
-
-// import { logout, useCurrentUser } from '~/api';
-import { ROUTES } from '~/constants';
+import { useCurrentUser, useLogout } from '~/features/auth/hooks';
 import { USER_NAVIGATION } from '~/constants/portal-nav';
 
 export const ConsoleUserMenu = () => {
-  // const navigate = useNavigate();
-  // const user = useCurrentUser();
-
-  // const signOut = useMutation({
-  //   mutationFn: logout,
-  //   onSuccess: () => navigate(ROUTES.SIGNIN, { replace: true }),
-  // });
+  const { user, isLoading } = useCurrentUser();
+  const { logout, isPending } = useLogout();
 
   return (
     <DsAppLayoutUserMenu
-      displayName={'user?.fullName'}
-      displayRole={'xxx'}
-      avatarUrl={'user?.avatarUrl'}
+      displayName={
+        isLoading
+          ? 'Loading...'
+          : [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.email
+      }
       items={USER_NAVIGATION}
-      onLogout={() => console.log('xxx')}
-      isLogoutPending={false}
+      onLogout={logout}
+      isLogoutPending={isPending}
     />
   );
 };

@@ -2,10 +2,7 @@ import { ApiError, type ApiSuccessResponse } from '@crypto/common';
 import { tokenStore } from './token-store';
 
 export type ApiClient = {
-  get: <TResponse>(
-    path: string,
-    init?: RequestInit,
-  ) => Promise<ApiSuccessResponse<TResponse>>;
+  get: <TResponse>(path: string, init?: RequestInit) => Promise<ApiSuccessResponse<TResponse>>;
   post: <TResponse>(
     path: string,
     body?: unknown,
@@ -21,10 +18,7 @@ export type ApiClient = {
     body?: unknown,
     init?: RequestInit,
   ) => Promise<ApiSuccessResponse<TResponse>>;
-  delete: <TResponse>(
-    path: string,
-    init?: RequestInit,
-  ) => Promise<ApiSuccessResponse<TResponse>>;
+  delete: <TResponse>(path: string, init?: RequestInit) => Promise<ApiSuccessResponse<TResponse>>;
 };
 
 export type CreateApiClientOptions = {
@@ -138,9 +132,8 @@ export function createApiClient({
           return null;
         }
 
-        const envelope = (await parseJsonBody(
-          response,
-        )) as ApiSuccessResponse<Partial<RefreshResponse>> | undefined;
+        const envelope = (await parseJsonBody(response)) as
+          ApiSuccessResponse<Partial<RefreshResponse>> | undefined;
         const data = envelope?.data;
 
         if (!data || typeof data.access !== 'string') {

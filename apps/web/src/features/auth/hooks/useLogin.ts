@@ -1,10 +1,15 @@
 import { tokenStore } from '@crypto/frontend-core';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { ROUTES } from '~/constants';
 import { loginApi } from '../api';
 import { AuthLoginFormData } from '../types';
+import { authKeys } from './auth.query-name';
 
 export const useLogin = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const mutation = useMutation({
     mutationFn: loginApi,
     onSuccess: (res) => {
@@ -14,8 +19,9 @@ export const useLogin = () => {
       }
 
       tokenStore.set(res.data.access);
+      queryClient.setQueryData(authKeys.currentUser(), res.data.user);
       toast.success(res.message);
-      // redirect('/me');
+      router.replace(ROUTES.DASHBOARD.OVERVIEW);
     },
     onError: (e) => {
       toast.error(e.message);

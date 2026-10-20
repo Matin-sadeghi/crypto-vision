@@ -4,7 +4,7 @@
  */
 export const ROUTES = {
   DASHBOARD: {
-    OVERVIEW: '/',
+    OVERVIEW: '/dashboard',
     MARKETS: '/mrkets',
     MY_WATCHLIST: '/wtach-list',
     AI_ANALYSIS: '/ai-analysis',

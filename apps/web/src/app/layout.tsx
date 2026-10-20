@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
-import { DsBox } from '@crypto/ui';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { AppProviders } from '~/providers/app-providers';
 
 import './globals.css';
-import { Toaster } from 'sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

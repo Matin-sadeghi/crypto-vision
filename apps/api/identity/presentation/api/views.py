@@ -138,21 +138,10 @@ class LoginView(APIView):
             },
               
                 "access":result.access,
-                "refresh":result.refresh
             },
             message="Login successful.",
         )
-        
-        sevenDays = 7 * 24 * 60 * 60
-        response.set_cookie(
-            key="refreshToken",
-            value=result.refresh,
-            max_age=sevenDays,
-            httponly=True,
-            secure=False,
-            samesite="Lax", 
-            path="/api/v1/auth/",
-        ) 
+        set_refresh_cookie(response, result.refresh)
         return response
     
 
