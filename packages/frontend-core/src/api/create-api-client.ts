@@ -214,5 +214,5 @@ export function createApiClient({
  * Server: `API_INTERNAL_BASE_URL` or direct Django URL.
  */
 export function resolveApiBaseUrl(): string {
-  return 'http://127.0.0.1:8000/api/v1';
+  return 'http://localhost:8000/api/v1';
 }

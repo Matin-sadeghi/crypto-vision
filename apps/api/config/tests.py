@@ -53,7 +53,7 @@ class AuthSessionTests(TestCase):
 
         refresh_cookie = response.cookies["refreshToken"]
         self.assertEqual(refresh_cookie["httponly"], True)
-        self.assertEqual(refresh_cookie["path"], "/api/v1/auth/")
+        self.assertEqual(refresh_cookie["path"], "/api/v1/")
 
         refresh_response = self.client.post("/api/v1/auth/refresh/")
         self.assertEqual(refresh_response.status_code, 200)
