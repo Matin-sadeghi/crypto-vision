@@ -30,7 +30,7 @@ export const ConsoleToolbar = () => {
       <DsAppLayoutSearchBar onSubmit={(query) => console.log({ search: query })} />
       <DsAppLayoutNotifications count={NOTIFICATION_COUNT} />
       <DsCustomButton size="sm" variant="ghost" onClick={toggleTheme}>
-        {theme === 'dark' ? <Sun /> : <Moon />}
+        {theme === 'dark' ? <Moon /> : <Sun />}
       </DsCustomButton>
       <ConsoleUserMenu />
     </DsAppLayoutToolbar>
