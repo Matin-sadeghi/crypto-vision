@@ -21,9 +21,7 @@ export const useThemeStore = create<{
 }>()(
   persist(
     (set, get) => ({
-      // Match whatever SSR / root Layout put on <html className="...">.
-      theme: getDomTheme(),
-
+      theme: 'light',
       applyTheme: (theme) => {
         applyTheme(theme);
         set({ theme });
@@ -37,7 +35,7 @@ export const useThemeStore = create<{
     }),
     {
       name: 'theme-storage-v1',
-
+      skipHydration: true,
       onRehydrateStorage: () => (state) => {
         applyTheme(state?.theme ?? getDomTheme());
       },

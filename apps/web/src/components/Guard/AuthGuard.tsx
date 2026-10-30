@@ -5,13 +5,16 @@ import { useCurrentUser } from '~/features';
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const { user } = useCurrentUser();
 
-  if (!user) {
-    return (
-      <DsBox bg={'background'} className="flex min-h-dvh items-center justify-center">
-        <DsTypography>Loading...</DsTypography>
-      </DsBox>
-    );
-  }
-
-  return children;
+  return (
+    <>
+      {!user && (
+        <DsBox bg={'background'} className="flex min-h-dvh items-center justify-center">
+          <DsTypography>Loading...</DsTypography>
+        </DsBox>
+      )}
+      <div hidden={!user} className="contents">
+        {children}
+      </div>
+    </>
+  );
 };
