@@ -92,7 +92,8 @@ class RegisterView(APIView):
                 "id": user.id,
                 "email": user.email,
                 "first_name":user.first_name,
-                "last_name":user.last_name
+                "last_name":user.last_name,
+                "is_staff":user.is_staff,
             },
             message="Registration successful.",
             status_code=status.HTTP_201_CREATED,
@@ -135,6 +136,7 @@ class LoginView(APIView):
                                "email": result.user.email,
                                "first_name":result.user.first_name,
                                "last_name":result.user.last_name, 
+                               "is_staff":result.user.is_staff,
             },
               
                 "access":result.access,
