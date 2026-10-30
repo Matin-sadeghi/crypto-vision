@@ -1,3 +1,4 @@
+'use client';
 import { tokenStore } from '@crypto/frontend-core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
